@@ -44,7 +44,7 @@ export const getCurrentUser = async () => {
   const accessToken = (await cookies()).get("accessToken")?.value;
   let decodedData = null;
   if (accessToken) {
-    decodedData =await jwtDecode(accessToken);
+    decodedData = await jwtDecode(accessToken);
     return decodedData;
   } else {
     return null;
@@ -54,4 +54,22 @@ export const getCurrentUser = async () => {
 export const logout = async () => {
   const accessToken = (await cookies()).delete("accessToken");
   return accessToken;
+};
+
+export const reCaptchaVerification = async (token: string) => {
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        secret: process.env.NEXT_PUBLIC_SERVER_KEY!,
+        response: token,
+      }),
+    });
+    return res.json();
+  } catch (err: any) {
+    return Error(err);
+  }
 };
