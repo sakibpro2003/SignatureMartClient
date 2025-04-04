@@ -1,12 +1,12 @@
-import RegisterForm from '@/components/modules/auth/register/RegisterForm';
-import React from 'react';
+import Register from "@/components/modules/auth/register/RegisterForm";
+import React from "react";
 
-const Register = () => {
-    return (
-        <div>
-            <RegisterForm></RegisterForm>
-        </div>
-    );
+const page = () => {
+  return (
+    <div className="h-screen w-screen flex justify-center items-center">
+      <Register></Register>
+    </div>
+  );
 };
 
-export default Register;
+export default page;

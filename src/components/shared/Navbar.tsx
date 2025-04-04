@@ -1,13 +1,16 @@
-// import Logo from "@/app/assets/svgs/Logo";
-import Logo from "@/app/assets/svgs/Logo";
 import { Button } from "../ui/button";
 import { Heart, ShoppingBag } from "lucide-react";
+import Logo from "./Logo";
 
-export default function Navbar() {
+export default async function Navbar() {
+  
   return (
     <header className="border-b w-full">
       <div className="container flex justify-between items-center mx-auto h-16 px-3">
-        <h1> <Logo></Logo> </h1>
+        <h1>
+          {" "}
+          <Logo></Logo>{" "}
+        </h1>
         <div className="max-w-md  flex-grow">
           <input
             type="text"
@@ -22,6 +25,12 @@ export default function Navbar() {
           <Button variant="outline" className="rounded-full p-0 size-10">
             <ShoppingBag />
           </Button>
+          {/* {user && (
+            <Link onClick={handleLogout} href={"/login"}>
+              Logout
+            </Link>
+          )}
+          {!user && <Button>Login</Button>} */}
         </nav>
       </div>
     </header>

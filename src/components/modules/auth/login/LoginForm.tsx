@@ -14,36 +14,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import React from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import registrationSchema from "./registerValidation";
+import loginValidation from "./loginValidation";
 import Logo from "@/components/shared/Logo";
-import { registerUser } from "@/services/AuthService";
+import { loginUser } from "@/services/AuthService";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-const Register = () => {
-  const { toast } = useToast();
+const LoginForm = () => {
   const router = useRouter();
-  const form = useForm({
-    resolver: zodResolver(registrationSchema),
-  });
+  const { toast } = useToast();
 
-  //!NOTE: Dont remove this 2 commnets
-  // const password = form.watch("password");
-  // const confirmPassword = form.watch("confirmPassword");
+  const form = useForm({
+    resolver: zodResolver(loginValidation),
+  });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await registerUser(data);
+      const res = await loginUser(data);
       if (res.success) {
         toast({
-          description: "Registration successfull 🙌",
+          description: "Login successful 🎉",
         });
-        router.push("/login");
+        router.push("/");
       }
       if (!res.success) {
         toast({
           variant: "destructive",
-          title: "Registration failed!",
           description: res.message,
         });
       }
@@ -57,20 +53,6 @@ const Register = () => {
       <Logo></Logo>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            //!NOTE: form.control to get the control of form inputs........................
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name:</FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} value={field.value || ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             //!NOTE: form.control to get the control of form inputs........................
             control={form.control}
@@ -99,27 +81,14 @@ const Register = () => {
               </FormItem>
             )}
           />
-          <FormField
-            //!NOTE: form.control to get the control of form inputs........................
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password:</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} value={field.value || ""} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <Button className="w-full mt-4" type="submit">
-            Register
+            <span className="font-bold">Login</span>
           </Button>
           <p className="mt-4">
-            Already have an account?{" "}
-            <Link className="text-blue-500" href={"/login"}>
-              Login
+            Dont have an account?{" "}
+            <Link className="text-blue-500" href={"/register"}>
+              Register
             </Link>
           </p>
         </form>
@@ -128,4 +97,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default LoginForm;
