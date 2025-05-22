@@ -1,9 +1,10 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/services/AuthService";
+import { useUser } from "@/context/UserContext";
 
-export default async function Home() {
-  const user = await getCurrentUser()
-  console.log(user)
+export default function Home() {
+  const user = useUser();
+  console.log(user);
   return (
     <div className="">
       <Button>click</Button>
