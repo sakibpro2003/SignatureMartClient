@@ -11,13 +11,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { registerUser } from "@/services/AuthService";
+import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
+import { loginValidation } from "./LoginValidation";
 
 const LoginForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await registerUser(data);
+      const res = await loginUser(data);
       console.log(res);
       if (res?.success) {
         toast.success(res?.message);
@@ -30,20 +31,18 @@ const LoginForm = () => {
   };
 
   const form = useForm({
-    resolver: zodResolver(),
+    resolver: zodResolver(loginValidation),
   });
 
   const {
     formState: { isSubmitting },
   } = form;
 
-  const password = form.watch("password");
-  const confirm_password = form.watch("confirm_password");
-  console.log(password, confirm_password);
+  const email = form.watch("email");
   return (
-    <div className="max-w-md p-4 rounded-2xl border-2 shadow-xl">
+    <div className="max-w-md p-4 rounded-2xl border-2  shadow-xl">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="email"
@@ -73,13 +72,7 @@ const LoginForm = () => {
             )}
           />
 
-          <Button
-            disabled={
-              (confirm_password !== "" && password !== confirm_password) ||
-              isSubmitting
-            }
-            type="submit"
-          >
+          <Button disabled={email == "" || isSubmitting} type="submit">
             {isSubmitting ? "Logging In..." : "Login"}
           </Button>
         </form>
