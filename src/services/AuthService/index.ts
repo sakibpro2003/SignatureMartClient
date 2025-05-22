@@ -42,10 +42,14 @@ export const getCurrentUser = async () => {
   //this must call from only server component!!
   const accessToken = (await cookies()).get("accessToken")?.value;
   let decodeData = null;
-  if(accessToken){
-     decodeData = jwtDecode(accessToken);
+  if (accessToken) {
+    decodeData = jwtDecode(accessToken);
     return decodeData;
-  }else{
+  } else {
     return null;
   }
+};
+
+export const logout = async () => {
+  (await cookies()).delete("accessToken");
 };
