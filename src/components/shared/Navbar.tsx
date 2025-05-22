@@ -14,11 +14,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logout } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function Navbar() {
+  const {user,setIsLoading} = useUser();
+  console.log(user, "user nav");
+
   const router = useRouter();
   const handleLogout = () => {
     logout();
+    setIsLoading(true)
     router.push("/login");
   };
   return (
@@ -39,35 +44,40 @@ export default function Navbar() {
           <Button variant="outline" className="rounded-full p-0 size-10">
             <Heart />
           </Button>
-          <Link href={"/login"}>
-            <Button className="p-2">Login</Button>
-          </Link>
+
           <Button variant="outline" className="rounded-full p-0 size-10">
             <ShoppingBag />
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleLogout}
-                className="hover: cursor-pointer"
-              >
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Billing</DropdownMenuItem>
+                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="hover: cursor-pointer"
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href={"/login"}>
+              <Button className="p-2">Login</Button>
+            </Link>
+          )}
         </nav>
       </div>
     </header>
