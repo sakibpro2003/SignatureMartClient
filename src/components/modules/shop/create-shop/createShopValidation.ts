@@ -11,5 +11,5 @@ export const createShopSchema = z.object({
   facebook: z.string().optional(),
   twitter: z.string().optional(),
   instagram: z.string().optional(),
-  services_offered: z.string().optional(),
+  servicesOffered: z.string().optional(),
 });

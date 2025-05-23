@@ -15,10 +15,26 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { createShopSchema } from "./createShopValidation";
+import SMImageUploader from "@/components/ui/core/SMImageUploader";
+import { useState } from "react";
 
 const CreateShopForm = () => {
+  const [imageFiles, setImageFiles] = useState<File[] | []>([]);
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data)
+    // console.log(data);
+    const servicesOffered = data?.servicesOffered
+      .split(",")
+      .map((service: string) => service.trim())
+      .filter((service: string) => service !== "");
+    // console.log(servicesOffered)
+    // console.log(data)
+    const modifiedData = {
+      ...data,
+      establishedYear: Number(data?.established_year),
+      servicesOffered: servicesOffered,
+    };
+    console.log(modifiedData, "mod");
     // try {
     //   const res = await registerUser(data);
     //   if (res?.success) {
@@ -97,7 +113,6 @@ const CreateShopForm = () => {
                 <FormControl>
                   <Input type="text" {...field} value={field.value || ""} />
                 </FormControl>
-                
               </FormItem>
             )}
           />
@@ -180,24 +195,36 @@ const CreateShopForm = () => {
             )}
           />
 
-          <div className="lg:col-span-2">
-            <FormField
-              control={form.control}
-              name="services_offered"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Services Offered</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe the services you offer..."
-                      {...field}
-                      value={field.value || ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="w-full lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <FormField
+                control={form.control}
+                name="servicesOffered"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Services Offered</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe the services you offer..."
+                        {...field}
+                        value={field.value || ""}
+                        className="min-h-[120px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div>
+              <FormItem>
+                <FormLabel>Upload Shop Logo</FormLabel>
+                <SMImageUploader
+                  imageFiles={imageFiles}
+                  setImageFiles={setImageFiles}
+                />
+              </FormItem>
+            </div>
           </div>
 
           <div className="lg:col-span-2">
