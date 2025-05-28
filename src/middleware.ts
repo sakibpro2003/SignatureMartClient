@@ -10,7 +10,7 @@ interface customJWTPayload extends JwtPayload {
 
 type Role = keyof typeof roleBasedPrivateRoutes;
 const roleBasedPrivateRoutes = {
-  user: [/^\/user/],
+  user: [/^\/user/,/^\/create-shop/],
   admin: [/^\/admin/],
 };
 export const middleware = async (request: NextRequest) => {
@@ -34,7 +34,8 @@ export const middleware = async (request: NextRequest) => {
       return NextResponse.next();
     }
   }
+  return NextResponse.redirect(new URL('/',request.url))
 };
 export const config = {
-  matcher: ["/login", "/create-shop"],
+  matcher: ["/login", "/create-shop", "/admin", "/admin/:page", "/user/:page"],
 };

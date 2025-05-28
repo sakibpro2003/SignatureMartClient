@@ -13,18 +13,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logout } from "@/services/AuthService";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import { protectedRoutes } from "@/constants";
 
 export default function Navbar() {
   const { user, setIsLoading } = useUser();
   // console.log(user, "user nav");
+  const pathname = usePathname();
 
   const router = useRouter();
   const handleLogout = () => {
     logout();
     setIsLoading(true);
-    router.push("/login");
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push("/");
+    }
   };
   return (
     <header className="border-b w-full">
@@ -48,11 +52,9 @@ export default function Navbar() {
           <Button variant="outline" className="rounded-full p-0 size-10">
             <ShoppingBag />
           </Button>
-         <Link href={'/create-shop'}>
-          <Button className="">
-            Create-Shop
-          </Button>
-         </Link>
+          <Link href={"/create-shop"}>
+            <Button className="">Create-Shop</Button>
+          </Link>
 
           {user ? (
             <DropdownMenu>
