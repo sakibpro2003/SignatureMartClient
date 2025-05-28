@@ -11,40 +11,44 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-// import { registerUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { createShopSchema } from "./createShopValidation";
 import SMImageUploader from "@/components/ui/core/SMImageUploader";
 import { useState } from "react";
+import { createShop } from "@/services/Shop";
 
 const CreateShopForm = () => {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // console.log(data);
+    console.log(data,'data 25')
     const servicesOffered = data?.servicesOffered
       .split(",")
       .map((service: string) => service.trim())
       .filter((service: string) => service !== "");
-    // console.log(servicesOffered)
-    // console.log(data)
     const modifiedData = {
       ...data,
       establishedYear: Number(data?.established_year),
       servicesOffered: servicesOffered,
     };
     console.log(modifiedData, "mod");
-    // try {
-    //   const res = await registerUser(data);
-    //   if (res?.success) {
-    //     toast.success(res?.message);
-    //   } else {
-    //     toast.error(res?.message);
-    //   }
-    // } catch (err: any) {
-    //   console.error(err);
-    // }
+    
+    try {
+      const formData = new FormData();
+      console.log(modifiedData,'39')
+      formData.append("data", JSON.stringify(modifiedData));
+      // formData.append("logo", imageFiles[0] as File);
+      const res = await createShop(formData);
+      if (res?.success) {
+        toast.success(res?.message);
+      } else {
+        console.log(res,'res');
+        toast.error(res?.message);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   const form = useForm({
@@ -54,9 +58,6 @@ const CreateShopForm = () => {
   const {
     formState: { isSubmitting },
   } = form;
-
-  // const password = form.watch("password");
-  // const confirm_password = form.watch("confirm_password");
 
   return (
     <div className="w-11/12 max-w-6xl mx-auto p-6 rounded-2xl border-2 shadow-xl">

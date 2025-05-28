@@ -17,13 +17,13 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 
 export default function Navbar() {
-  const {user,setIsLoading} = useUser();
-  console.log(user, "user nav");
+  const { user, setIsLoading } = useUser();
+  // console.log(user, "user nav");
 
   const router = useRouter();
   const handleLogout = () => {
     logout();
-    setIsLoading(true)
+    setIsLoading(true);
     router.push("/login");
   };
   return (
@@ -48,6 +48,11 @@ export default function Navbar() {
           <Button variant="outline" className="rounded-full p-0 size-10">
             <ShoppingBag />
           </Button>
+         <Link href={'/create-shop'}>
+          <Button className="">
+            Create-Shop
+          </Button>
+         </Link>
 
           {user ? (
             <DropdownMenu>

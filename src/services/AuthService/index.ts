@@ -13,7 +13,7 @@ export const registerUser = async (userData: FieldValues) => {
     });
     return res.json();
   } catch (err: any) {
-    console.log(err);
+    // console.log(err);
     return Error(err);
   }
 };

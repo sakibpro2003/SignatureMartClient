@@ -14,7 +14,7 @@ const SMImageUploader = ({
     const file = event.target.files![0]; // them image will be in 0 index
     setImageFiles((prev) => [...prev, file]); // if any previous file exists, then it will accept them first with ...prev
   };
-  console.log(imageFiles);
+  // console.log(imageFiles);
   return (
     <div className=" p-4 border border-dashed border-gray-300 rounded-xl shadow-sm">
       <label
