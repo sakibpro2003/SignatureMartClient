@@ -14,15 +14,17 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginValidation } from "./LoginValidation";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
   const router = useRouter();
 
-  const handleUser1 = ()=>{
-    form.setValue('password',"s@SD,sdf1111")
-    form.setValue('email',"user1@gmail.com")
-  }
+  const handleUser1 = () => {
+    form.setValue("password", "s@SD,sdf1111");
+    form.setValue("email", "user1@gmail.com");
+  };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -30,7 +32,9 @@ const LoginForm = () => {
       console.log(res);
       if (res?.success) {
         toast.success(res?.message);
-        router.push("/");
+        if (redirect) {
+          router.push(redirect);
+        }
       } else {
         toast.error(res?.message);
       }
